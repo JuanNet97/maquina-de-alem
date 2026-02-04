@@ -3,7 +3,7 @@ import pandas as pd
 import random
 from openai import OpenAI
 
-# 1. ESTÉTICA RADICAL (Rojo y Blanco)
+# 1. ESTÉTICA RADICAL
 st.set_page_config(page_title="La Máquina de Alem", page_icon="🇦🇷")
 st.markdown("""
     <style>
@@ -15,62 +15,47 @@ st.markdown("""
     """, unsafe_allow_html=True)
 
 st.title("📟 LA MÁQUINA DE ALEM")
-st.subheader("la app para radicalizarlo todo")
+st.subheader("Caja Negra de Resiliencia Discursiva")
 
-# 2. CONFIGURACIÓN DE IA (DALL-E)
+# 2. CONFIGURACIÓN
 with st.sidebar:
     st.header("⚙️ Configuración")
     api_key = st.text_input("Introduce tu OpenAI API Key:", type="password")
-    st.info("Esta clave permite que la máquina 'dibuje' los memes usando DALL-E.")
 
-# 3. LÓGICA DE LA CAJA NEGRA
-df = pd.read_csv("matriz.csv")
+# 3. PROCESAMIENTO
+try:
+    df = pd.read_csv("matriz.csv")
+    
+    coyuntura = st.text_area("💬 Ingresa la crisis o coyuntura actual:", placeholder="Ej: Crisis de confianza en las instituciones...")
 
-coyuntura = st.text_area("💬 Ingresa la crisis o coyuntura actual:", placeholder="Ej: Crisis de confianza en las instituciones...")
+    if st.button("PROCESAR EN CAJA NEGRA"):
+        if coyuntura:
+            fila = df.sample(n=1).iloc[0]
+            
+            st.markdown(f"""
+            <div class="black-box">
+            <h2 style='color:#00ff00'> > CAJA NEGRA: RESULTADO </h2>
+            <strong>SIGNIFICANTE:</strong> {fila['Significante']}<br>
+            <strong>INDICADOR ACADÉMICO:</strong> {fila['Indicador']}<br>
+            <strong>SISTEMA OPERATIVO:</strong> {fila['Concepto_Tesis']}<br>
+            <hr>
+            <strong>TRADUCCIÓN NARRATIVA:</strong><br>
+            "Ante la crisis de '{coyuntura}', la Máquina de Alem activa el protocolo de {fila['Significante']}. 
+            Como indica el {fila['Discurso_Fuente']}, el radicalismo entra en modo de Reparación Nacional."
+            </div>
+            """, unsafe_allow_html=True)
 
-if st.button("PROCESAR DISCURSO Y GENERAR MEME"):
-    if coyuntura:
-        # Selección aleatoria basada en la matriz de la tesis
-        fila = df.sample(n=1).iloc[0]
-        
-        st.markdown("### Como diria Alem:")
-        st.markdown(f"""
-        <div class="black-box">
-        <h2 style='color:#00ff00'> > CAJA NEGRA: RESULTADO </h2>
-        <strong>SIGNIFICANTE DETECTADO:</strong> {fila['Significante']}<br>
-        <strong>INDICADOR ACADÉMICO:</strong> {fila['Indicador']}<br>
-        <strong>SISTEMA OPERATIVO:</strong> {fila['Concepto_Tesis']}<br>
-        <hr>
-        <strong>TRADUCCIÓN NARRATIVA:</strong><br>
-        "Ante la crisis de '{coyuntura}', la Máquina de Alem activa el protocolo de {fila['Significante']}. 
-        Como indica el {fila['Discurso_Fuente']}, el radicalismo entra en modo de Reparación Nacional."
-        </div>
-        """, unsafe_allow_html=True)
-
-        # 4. GENERACIÓN DE IMAGEN CON DALLE
-        if api_key:
-            client = OpenAI(api_key=api_key)
-            with st.spinner("La Máquina de Alem está dibujando el meme..."):
-                try:
-                    # Construimos el prompt usando los datos de la tesis
-                    prompt_dalle = f"A political meme about {fila['Significante']} in Argentina, style: {fila['Meme_Base']}. High contrast red and white colors. Professional graphic design."
-                    
-                    response = client.images.generate(
-                        model="dall-e-3",
-                        prompt=prompt_dalle,
-                        size="1024x1024",
-                        quality="standard",
-                        n=1,
-                    )
-                    image_url = response.data[0].url
-                    st.image(image_url, caption=f"Meme generado: {fila['Significante']}")
-                    st.success("Meme generado exitosamente.")
-                except Exception as e:
-                    st.error(f"Error con DALL-E: {e}")
+            if api_key:
+                client = OpenAI(api_key=api_key)
+                with st.spinner("Generando meme..."):
+                    prompt_dalle = f"A political meme about {fila['Significante']} in Argentina, style: {fila['Meme_Visual']}. High contrast red and white colors."
+                    response = client.images.generate(model="dall-e-3", prompt=prompt_dalle, n=1)
+                    st.image(response.data[0].url)
+            else:
+                st.warning(f"Sugerencia visual: {fila['Meme_Visual']}")
         else:
-            st.warning("⚠️ Sin API Key no puedo generar la imagen, pero aquí está la idea: " + fila['Meme_Base'])
-    else:
-
-        st.error("Debes ingresar una coyuntura para que la máquina pueda narrar.")
+            st.error("Ingresa una coyuntura.")
+except Exception as e:
+    st.error(f"Error de sistema: {e}")
 
 
