@@ -3,7 +3,7 @@ import pandas as pd
 import random
 from openai import OpenAI
 
-# --- CONFIGURACIÓN DE LA MÁQUINA (Estética Roja y Blanca) ---
+# --- CONFIGURACIÓN DE LA INTERFAZ (Estética Roja y Blanca) ---
 st.set_page_config(page_title="La Máquina de Alem", page_icon="🇦🇷", layout="centered")
 
 st.markdown("""
@@ -25,7 +25,7 @@ st.markdown("""
 
 # --- ENCABEZADO ---
 st.title("/// LA MÁQUINA DE ALEM_")
-st.markdown("**Versión 2.0:** Sistema de Procesamiento de Identidad Discursiva.")
+st.markdown("**Sistema de Procesamiento de Identidad Discursiva (V 2.0)**")
 st.write("Base de datos: *Archivo Unificado (Tesis Maestría)*")
 
 # --- CONEXIÓN IA (DALL-E) ---
@@ -33,7 +33,7 @@ if "OPENAI_API_KEY" in st.secrets:
     client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 else:
     client = None
-    st.sidebar.warning("⚠️ MODO TEXTO: API Key no detectada para generar imágenes.")
+    st.sidebar.warning("⚠️ MODO TEXTO: API Key no detectada. La máquina no generará imágenes.")
 
 # --- CARGA DEL CEREBRO (CSV) ---
 try:
@@ -45,10 +45,10 @@ try:
 
     if st.button("EJECUTAR ANÁLISIS"):
         if coyuntura:
-            # Simulamos procesamiento de máquina
+            # Simulamos procesamiento de máquina (Latencia -> Activación)
             with st.spinner("Buscando en el Código Fuente (1890-2025)..."):
                 
-                # Selección inteligente (por ahora aleatoria ponderada, simula búsqueda)
+                # Selección aleatoria (Simula la búsqueda en la matriz)
                 fila = df.sample(n=1).iloc[0]
                 
                 # --- SALIDA VISUAL ---
@@ -64,15 +64,15 @@ try:
                 """, unsafe_allow_html=True)
 
                 # 2. El Discurso Crudo (La evidencia del anexo)
-                st.markdown("### 📜 Archivo Histórico:")
+                st.markdown("### 📜 Archivo Histórico (Fragmento Crudo):")
                 st.markdown(f"<div class='quote-box'>«{fila['Fragmento_Crudo']}»</div>", unsafe_allow_html=True)
 
                 # 3. La Lógica de la Tesis
                 st.markdown("### 🧠 Lógica del Software:")
                 st.info(f"{fila['Logica_Maquina']}")
-                st.write(f"**Estrategia de Consultoría:** Ante la crisis actual, el partido no debe innovar en el vacío, sino *actualizar* este concepto de **{fila['Significante']}**.")
+                st.write(f"**Estrategia:** Ante la crisis actual, el partido no debe innovar en el vacío, sino *actualizar* este concepto de **{fila['Significante']}**.")
 
-                # 4. Generación de Meme Radical
+                # 4. Generación de Meme Radical con DALL-E
                 st.markdown("### 🎨 Generador de Contenido Visual:")
                 if client:
                     prompt_final = f"Political poster art, {fila['Prompt_Visual']}, colors red and white, high quality, propaganda style."
@@ -88,13 +88,13 @@ try:
             st.error("Error: Input vacío. La máquina necesita datos de la realidad.")
 
 except FileNotFoundError:
-    st.error("CRÍTICO: No se encuentra el archivo 'matriz.csv'. Cargue la base de datos.")
+    st.error("CRÍTICO: No se encuentra el archivo 'matriz.csv'.")
 except Exception as e:
     st.error(f"Error del sistema: {e}")
 
-# --- PIE DE PÁGINA ---
+# --- BARRA LATERAL ---
 st.sidebar.markdown("### Sobre la Máquina")
 st.sidebar.info("""
 Esta herramienta operacionaliza la tesis 'El funcionamiento de la máquina de Alem'.
-Entiende al radicalismo no como una estructura, sino como un **software narrativo** que procesa crisis.
+Entiende al radicalismo no como una estructura burocrática, sino como un **software narrativo** que procesa crisis.
 """)
