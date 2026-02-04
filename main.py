@@ -33,14 +33,17 @@ if st.button("PROCESAR DISCURSO Y GENERAR MEME"):
         # Selección aleatoria basada en la matriz de la tesis
         fila = df.sample(n=1).iloc[0]
         
-        st.markdown("### 📤 Resultado de la Caja Negra")
+        st.markdown("### Como diria Alem:")
         st.markdown(f"""
         <div class="black-box">
-        <strong>SIGNIFICANTE:</strong> {fila['Significante']}<br>
-        <strong>INDICADOR:</strong> {fila['Indicador']} ({fila['Atributo']})<br><br>
-        <strong>NARRATIVA DE REPARACIÓN:</strong><br>
-        "Ante {coyuntura}, el radicalismo activa su software de {fila['Concepto_Tesis']}. 
-        La tradición no es repetición, es resiliencia."
+        <h2 style='color:#00ff00'> > CAJA NEGRA: RESULTADO </h2>
+        <strong>SIGNIFICANTE DETECTADO:</strong> {fila['Significante']}<br>
+        <strong>INDICADOR ACADÉMICO:</strong> {fila['Indicador']}<br>
+        <strong>SISTEMA OPERATIVO:</strong> {fila['Concepto_Tesis']}<br>
+        <hr>
+        <strong>TRADUCCIÓN NARRATIVA:</strong><br>
+        "Ante la crisis de '{coyuntura}', la Máquina de Alem activa el protocolo de {fila['Significante']}. 
+        Como indica el {fila['Discurso_Fuente']}, el radicalismo entra en modo de Reparación Nacional."
         </div>
         """, unsafe_allow_html=True)
 
@@ -69,4 +72,5 @@ if st.button("PROCESAR DISCURSO Y GENERAR MEME"):
     else:
 
         st.error("Debes ingresar una coyuntura para que la máquina pueda narrar.")
+
 
