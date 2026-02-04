@@ -3,59 +3,67 @@ import pandas as pd
 import random
 from openai import OpenAI
 
-# 1. ESTÉTICA RADICAL
+# Estética basada en la Tradición Argentina (Blanco y Rojo)
 st.set_page_config(page_title="La Máquina de Alem", page_icon="🇦🇷")
+
 st.markdown("""
     <style>
-    .stApp { background-color: white; border-top: 15px solid #D32F2F; }
-    h1 { color: #D32F2F; font-family: 'Helvetica'; font-weight: 800; text-transform: uppercase; }
-    .stButton>button { background-color: #D32F2F; color: white; border: none; font-weight: bold; width: 100%; }
-    .black-box { background-color: #1a1a1a; color: #fdfdfd; padding: 25px; border-left: 10px solid #D32F2F; font-family: 'Courier New'; }
+    .stApp { background-color: white; border-top: 20px solid #D32F2F; }
+    h1 { color: #D32F2F; font-family: 'Helvetica'; font-weight: 900; }
+    .stButton>button { background-color: #D32F2F; color: white; border-radius: 0px; font-weight: bold; width: 100%; }
+    .software-box { background-color: #f8f9fa; border: 1px solid #D32F2F; padding: 20px; font-family: 'Courier New'; }
+    .quote-box { background-color: #ffffff; border-left: 5px solid #D32F2F; padding: 15px; font-style: italic; color: #333; }
     </style>
     """, unsafe_allow_html=True)
 
 st.title("📟 LA MÁQUINA DE ALEM")
-st.subheader("Caja Negra de Resiliencia Discursiva")
+st.write("#### Herramienta de Mantenimiento del Software Político")
 
-# 2. CONFIGURACIÓN
-with st.sidebar:
-    st.header("⚙️ Configuración")
-    api_key = st.text_input("Introduce tu OpenAI API Key:", type="password")
+# Conexión con OpenAI mediante Secrets
+if "OPENAI_API_KEY" in st.secrets:
+    client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
+else:
+    client = None
+    st.sidebar.warning("API Key no detectada. Generación de imágenes desactivada.")
 
-# 3. PROCESAMIENTO
+# Cargar Matriz basada en el Archivo Unificado
 try:
     df = pd.read_csv("matriz.csv")
     
-    coyuntura = st.text_area("💬 Ingresa la crisis o coyuntura actual:", placeholder="Ej: Crisis de confianza en las instituciones...")
+    st.write("---")
+    coyuntura = st.text_input("Ingrese la crisis o conflicto para procesar:", placeholder="Ej: Corrupción, Inestabilidad económica...")
 
-    if st.button("PROCESAR EN CAJA NEGRA"):
+    if st.button("CORRER SOFTWARE RADICAL"):
         if coyuntura:
+            # Selección de significante estable
             fila = df.sample(n=1).iloc[0]
             
             st.markdown(f"""
-            <div class="black-box">
-            <h2 style='color:#00ff00'> > CAJA NEGRA: RESULTADO </h2>
-            <strong>SIGNIFICANTE:</strong> {fila['Significante']}<br>
-            <strong>INDICADOR ACADÉMICO:</strong> {fila['Indicador']}<br>
-            <strong>SISTEMA OPERATIVO:</strong> {fila['Concepto_Tesis']}<br>
-            <hr>
-            <strong>TRADUCCIÓN NARRATIVA:</strong><br>
-            "Ante la crisis de '{coyuntura}', la Máquina de Alem activa el protocolo de {fila['Significante']}. 
-            Como indica el {fila['Discurso_Fuente']}, el radicalismo entra en modo de Reparación Nacional."
+            <div class="software-box">
+            <strong>ESTADO DEL SOFTWARE:</strong> {fila['Estado_del_Software'].upper()}<br>
+            <strong>SIGNIFICANTE DETECTADO:</strong> {fila['Significante']}<br>
+            <strong>SEDIMENTO DISCURSIVO:</strong> {fila['Sedimento_Discursivo']}
             </div>
             """, unsafe_allow_html=True)
+            
+            st.write("---")
+            st.markdown("#### 📜 Fragmento del Código Fuente (Discurso Crudo):")
+            st.markdown(f"<div class='quote-box'>{fila['Fragmento_Crudo']}</div>", unsafe_allow_html=True)
+            
+            st.write(f"Ante '{coyuntura}', el sistema requiere ejecutar la actualización basada en **{fila['Significante']}**. El hardware partidario debe activarse para aplicar este sedimento discursivo.")
 
-            if api_key:
-                client = OpenAI(api_key=api_key)
-                with st.spinner("Generando meme..."):
-                    prompt_dalle = f"A political meme about {fila['Significante']} in Argentina, style: {fila['Meme_Visual']}. High contrast red and white colors."
-                    response = client.images.generate(model="dall-e-3", prompt=prompt_dalle, n=1)
-                    st.image(response.data[0].url)
+            if client:
+                with st.spinner("Diseñando actualización memética..."):
+                    prompt = f"Political graphic for Argentina, style: {fila['Actualizacion_Memetica']}, red and white palette, professional minimalist."
+                    response = client.images.generate(model="dall-e-3", prompt=prompt, n=1)
+                    st.image(response.data[0].url, caption=f"Actualización: {fila['Significante']}")
             else:
-                st.warning(f"Sugerencia visual: {fila['Meme_Visual']}")
+                st.info(f"💡 **Actualización Memética Sugerida:** {fila['Actualizacion_Memetica']}")
         else:
-            st.error("Ingresa una coyuntura.")
+            st.error("Ingrese un input para activar la máquina.")
+
 except Exception as e:
-    st.error(f"Error de sistema: {e}")
+    st.error(f"Fallo en la carga del sistema: {e}")
 
-
+st.sidebar.markdown("---")
+st.sidebar.write("**Mantenimiento Técnico:** La UCR no desaparece, queda en latencia activa esperando el re-inicio del sistema nacional.")
