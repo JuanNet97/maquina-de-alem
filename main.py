@@ -12,7 +12,7 @@ st.markdown("""
     .stButton>button { background-color: #D32F2F; color: white; border: none; font-weight: bold; width: 100%; }
     .black-box { background-color: #1a1a1a; color: #fdfdfd; padding: 25px; border-left: 10px solid #D32F2F; font-family: 'Courier New'; }
     </style>
-    """, unsafe_allow_status=True)
+    """, unsafe_allow_html=True)
 
 st.title("📟 LA MÁQUINA DE ALEM")
 st.subheader("la app para radicalizarlo todo")
@@ -67,4 +67,5 @@ if st.button("PROCESAR DISCURSO Y GENERAR MEME"):
         else:
             st.warning("⚠️ Sin API Key no puedo generar la imagen, pero aquí está la idea: " + fila['Meme_Base'])
     else:
+
         st.error("Debes ingresar una coyuntura para que la máquina pueda narrar.")
