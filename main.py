@@ -42,7 +42,7 @@ if st.button("PROCESAR DISCURSO Y GENERAR MEME"):
         "Ante {coyuntura}, el radicalismo activa su software de {fila['Concepto_Tesis']}. 
         La tradición no es repetición, es resiliencia."
         </div>
-        """, unsafe_allow_status=True)
+        """, unsafe_allow_html=True)
 
         # 4. GENERACIÓN DE IMAGEN CON DALLE
         if api_key:
@@ -69,3 +69,4 @@ if st.button("PROCESAR DISCURSO Y GENERAR MEME"):
     else:
 
         st.error("Debes ingresar una coyuntura para que la máquina pueda narrar.")
+
